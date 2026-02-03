@@ -1,0 +1,181 @@
+---
+import Contact from "../components/contact.astro";
+import Skills from "../components/skills.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import LanguagePicker from "../components/LanguagePicker.astro";
+import { ui } from "../i18n/ui";
+import "../styles/global.css";
+
+const lang = "es";
+const t = ui[lang];
+---
+
+<html lang={lang}>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Ignacio Arce | {t["hero.title"]}</title>
+	</head>
+	<body>
+		<header>
+			<div class="logo-area">
+				<h1>Ignacio Arce</h1>
+			</div>
+
+			<div class="controls-area">
+				<nav>
+					<a href="#about">{t["nav.about"]}</a>
+					<a href="#skills">{t["nav.skills"]}</a>
+					<a href="#projects">{t["nav.projects"]}</a>
+					<a href="#contact">{t["nav.contact"]}</a>
+				</nav>
+				<div class="actions">
+					<LanguagePicker lang={lang} />
+					<ThemeToggle />
+				</div>
+			</div>
+		</header>
+
+		<main>
+			<section id="about" class="hero">
+				<h2>{t["hero.title"]}</h2>
+				<p class="subtitle">{t["hero.subtitle"]}</p>
+
+				<div class="about-content">
+					<h3>{t["about.title"]}</h3>
+					<p>{t["about.desc"]}</p>
+				</div>
+			</section>
+
+			<Skills lang={lang} />
+
+			<section id="projects">
+				<h2>{t["nav.projects"]}</h2>
+				<p>{t["projects.status"]}</p>
+			</section>
+
+			<section id="contact">
+				<Contact lang={lang} />
+			</section>
+		</main>
+
+		<footer>
+			<p>
+				&copy; {new Date().getFullYear()} Ignacio Arce. {
+					t["footer.rights"]
+				}
+			</p>
+		</footer>
+	</body>
+</html>
+
+<style>
+	header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap; /* Handle small screens */
+		gap: 1rem;
+	}
+
+	.logo-area h1 {
+		margin: 0;
+	}
+
+	.controls-area {
+		display: flex;
+		align-items: center;
+		gap: 2rem;
+	}
+
+	.actions {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		border-left: 1px solid var(--border-color);
+		padding-left: 1rem;
+	}
+
+	.hero {
+		text-align: center;
+		padding: 2rem 0 4rem 0;
+	}
+
+	.subtitle {
+		font-size: 1.5rem;
+		color: var(--text-color);
+		opacity: 0.8;
+		margin-bottom: 3rem;
+	}
+
+	.about-content {
+		max-width: 600px;
+		margin: 0 auto;
+		text-align: center;
+		background: var(--secondary-bg);
+		padding: 2rem;
+		border-radius: 12px;
+		border: 1px solid var(--border-color);
+	}
+
+	@media (max-width: 768px) {
+		header {
+			padding-top: 1rem;
+			padding-bottom: 1rem;
+		}
+
+		.logo-area h1 {
+			font-size: 1.2rem;
+		}
+
+		.controls-area {
+			flex-direction: column;
+			gap: 0.75rem;
+			width: 100%;
+			align-items: flex-start;
+		}
+
+		nav {
+			width: 100%;
+			justify-content: space-around;
+			gap: 0.5rem;
+			flex-wrap: wrap;
+		}
+
+		nav a {
+			font-size: 0.85rem;
+			padding: 0.25rem;
+		}
+
+		.actions {
+			border-left: none;
+			border-top: 1px solid var(--border-color);
+			padding-left: 0;
+			padding-top: 0.75rem;
+			width: 100%;
+			justify-content: space-between;
+		}
+
+		.hero {
+			padding: 1.5rem 0 3rem 0;
+		}
+
+		.subtitle {
+			font-size: 1.2rem;
+			margin-bottom: 2rem;
+		}
+
+		.about-content {
+			padding: 1.5rem;
+		}
+
+		.about-content h3 {
+			font-size: 1.3rem;
+		}
+	}
+</style>

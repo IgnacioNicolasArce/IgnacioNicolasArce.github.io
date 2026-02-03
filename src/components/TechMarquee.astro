@@ -1,0 +1,216 @@
+---
+const technologies = [
+    {
+        name: "Astro",
+        img: "/icons/astro-color.svg",
+    },
+    {
+        name: "React",
+        img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    },
+    {
+        name: "TypeScript",
+        img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+    },
+    {
+        name: "Git",
+        img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
+    },
+    {
+        name: "Node.js",
+        img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+    },
+    {
+        name: "Angular",
+        img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angular/angular-original.svg",
+    },
+];
+---
+
+<div class="slider-container">
+    <div class="slider-track">
+        {
+            technologies.map((tech) => (
+                <div class="slide">
+                    <img src={tech.img} alt={tech.name} />
+                    <span>{tech.name}</span>
+                </div>
+            ))
+        }
+
+        {
+            technologies.map((tech) => (
+                <div class="slide">
+                    <img src={tech.img} alt={tech.name} />
+                    <span>{tech.name}</span>
+                </div>
+            ))
+        }
+
+        {
+            technologies.map((tech) => (
+                <div class="slide">
+                    <img src={tech.img} alt={tech.name} />
+                    <span>{tech.name}</span>
+                </div>
+            ))
+        }
+
+        {
+            technologies.map((tech) => (
+                <div class="slide">
+                    <img src={tech.img} alt={tech.name} />
+                    <span>{tech.name}</span>
+                </div>
+            ))
+        }
+    </div>
+</div>
+
+<script>
+    const container = document.querySelector(
+        ".slider-container",
+    ) as HTMLElement;
+    const track = document.querySelector(".slider-track") as HTMLElement;
+
+    if (container && track) {
+        let isDragging = false;
+        let startX = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let animationID: number;
+
+        container.style.cursor = "grab";
+
+        function animation() {
+            if (!isDragging) {
+                // Movimiento automático cuando no se arrastra
+                currentTranslate -= 0.5; // Velocidad de desplazamiento
+
+                // Crear loop infinito: cuando llegue al 25% reiniciar a 0
+                const trackWidth = track.offsetWidth;
+                const resetPoint = -(trackWidth / 4);
+
+                if (currentTranslate <= resetPoint) {
+                    currentTranslate = 0;
+                }
+
+                setSliderPosition();
+            }
+            animationID = requestAnimationFrame(animation);
+        }
+
+        function setSliderPosition() {
+            track.style.transform = `translateX(${currentTranslate}px)`;
+        }
+
+        function touchStart(index: number) {
+            return function (event: MouseEvent | TouchEvent) {
+                isDragging = true;
+                startX = getPositionX(event);
+                container.style.cursor = "grabbing";
+            };
+        }
+
+        function touchMove(event: MouseEvent | TouchEvent) {
+            if (isDragging) {
+                const currentPosition = getPositionX(event);
+                currentTranslate = prevTranslate + currentPosition - startX;
+                setSliderPosition();
+            }
+        }
+
+        function touchEnd() {
+            isDragging = false;
+            container.style.cursor = "grab";
+            prevTranslate = currentTranslate;
+        }
+
+        function getPositionX(event: MouseEvent | TouchEvent) {
+            return event instanceof MouseEvent
+                ? event.clientX
+                : event.touches[0].clientX;
+        }
+
+        // Mouse events
+        container.addEventListener("mousedown", touchStart(0));
+        container.addEventListener("mousemove", touchMove);
+        container.addEventListener("mouseup", touchEnd);
+        container.addEventListener("mouseleave", touchEnd);
+
+        // Touch events
+        container.addEventListener("touchstart", touchStart(0));
+        container.addEventListener("touchmove", touchMove);
+        container.addEventListener("touchend", touchEnd);
+
+        // Iniciar animación
+        animation();
+
+        // Prevenir comportamiento de arrastre de imágenes
+        track.addEventListener("dragstart", (e) => e.preventDefault());
+    }
+</script>
+
+<style>
+    .slider-container {
+        width: 100%;
+        height: 100px;
+        overflow: hidden;
+        position: relative;
+        background: var(--secondary-bg);
+        cursor: grab;
+        user-select: none;
+
+        mask-image: linear-gradient(
+            to right,
+            transparent,
+            black 10%,
+            black 90%,
+            transparent
+        );
+    }
+
+    .slider-container:active {
+        cursor: grabbing;
+    }
+
+    .slider-track {
+        display: flex;
+        width: max-content;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .slider-track {
+            animation-play-state: paused;
+        }
+    }
+
+    .slide {
+        min-width: 180px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 20px;
+        gap: 15px;
+    }
+
+    .slide img {
+        max-width: 100%;
+        max-height: 60px;
+        object-fit: contain;
+        filter: grayscale(100%);
+        transition: filter 0.3s ease;
+        user-select: none;
+        pointer-events: none;
+    }
+
+    .slide:hover img {
+        filter: grayscale(0%);
+    }
+
+    .slide span {
+        user-select: none;
+        pointer-events: none;
+    }
+</style>
